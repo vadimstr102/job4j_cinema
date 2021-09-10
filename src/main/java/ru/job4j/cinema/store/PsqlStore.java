@@ -1,6 +1,7 @@
 package ru.job4j.cinema.store;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.cinema.models.Account;
@@ -12,6 +13,7 @@ import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -108,7 +110,7 @@ public class PsqlStore {
         }
     }
 
-    public boolean saveTicket(Ticket ticket) {
+    public void saveTicket(Ticket ticket) throws Exception {
         try (Connection cn = pool.getConnection();
              PreparedStatement ps = cn.prepareStatement(
                      "INSERT INTO ticket(row, cell, account_id) VALUES (?, ?, ?)"
@@ -126,10 +128,9 @@ public class PsqlStore {
                     ticket.setId(it.getInt("id"));
                 }
             }
-            return true;
         } catch (Exception e) {
             LOG.error("Exception in PsqlStore.saveTicket()", e);
-            return false;
+            throw e;
         }
     }
 }

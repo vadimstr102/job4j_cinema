@@ -26,17 +26,14 @@ function pay() {
                 email: $('#email').val(),
                 phone: $('#phone').val()
             }),
-            dataType: 'json',
-            success: function (data) {
-                if (data) {
-                    alert("Оплата произведена");
-                } else {
-                    alert("Извините, данное место уже забронировано");
-                }
+            success: function () {
+                alert("Оплата произведена");
                 window.location.href = "/job4j_cinema/index.html";
             },
             error: function (err) {
                 console.log(err);
+                alert("Извините, данное место уже забронировано");
+                window.location.href = "/job4j_cinema/index.html";
             }
         });
     }
